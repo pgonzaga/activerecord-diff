@@ -11,9 +11,9 @@ rvm:
   - ree
 
 gemfile:
-  - gemfiles/activerecord_3_0.gemfile
-  - gemfiles/activerecord_3_1.gemfile
-  - gemfiles/activerecord_3_2.gemfile
+  - activerecord_3_0.gemfile
+  - activerecord_3_1.gemfile
+  - activerecord_3_2.gemfile
 
 matrix:
   allow_failures:
