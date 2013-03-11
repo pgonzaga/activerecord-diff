@@ -1,27 +1,14 @@
 module ActiveRecord
   module Diff
-    module ClassMethods
+    module ClassMethod
       def diff(*attrs)
-        write_inheritable_attribute(:diff_attrs, attrs)
-      end
-
-      def diff_attrs
-        attrs = read_inheritable_attribute(:diff_attrs)
-
-        if attrs.nil?
-          content_columns.map { |column| column.name }
-        elsif attrs.length == 1 && Hash === attrs.first
-          columns = content_columns.map { |column| column.name.to_sym }
-
-          columns + (attrs.first[:include] || []) - (attrs.first[:exclude] || [])
-        else
-          attrs
-        end
+        self.diff_attrs = attrs
       end
     end
 
     def self.included(base)
-      base.extend ClassMethods
+      base.class_attribute :diff_attrs
+      base.extend ClassMethod
     end
 
     def diff?(record = nil)
@@ -40,7 +27,17 @@ module ActiveRecord
           [attr_name, old_record.send(attr_name), hash_value]
         end
       else
-        diff_each(self.class.diff_attrs) do |attr_name|
+        attrs = self.class.diff_attrs
+
+        if attrs.nil?
+          attrs = self.class.content_columns.map { |column| column.name.to_sym }
+        elsif attrs.length == 1 && Hash === attrs.first
+          columns = self.class.content_columns.map { |column| column.name.to_sym }
+
+          attrs = columns + (attrs.first[:include] || []) - (attrs.first[:exclude] || [])
+        end
+
+        diff_each(attrs) do |attr_name|
           [attr_name, old_record.send(attr_name), new_record.send(attr_name)]
         end
       end
