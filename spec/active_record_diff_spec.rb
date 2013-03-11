@@ -14,7 +14,7 @@ end
 describe 'ActiveRecord::Diff' do
   before do
     @person = Class.new(ActiveRecord::Base) do
-      set_table_name :people
+      self.table_name = :people
 
       include ActiveRecord::Diff
     end
