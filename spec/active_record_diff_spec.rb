@@ -40,6 +40,12 @@ describe 'ActiveRecord::Diff' do
 
       @alice.diff(@bob).must_equal({:id => [1, 2], :name => %w( alice bob )})
     end
+
+    it 'uses the list of attributes specified by the diff class method' do
+      @person.diff :id, :name
+
+      @alice.diff(@bob).must_equal({:id => [1, 2], :name => %w( alice bob )})
+    end
   end
 
   describe 'diff method called with a hash argument' do
