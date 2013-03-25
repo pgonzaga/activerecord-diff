@@ -5,6 +5,14 @@ activerecord-diff
 Simple ActiveRecord diff functionality.
 
 
+Installation
+------------
+
+```
+$ gem install activerecord-diff
+```
+
+
 Example usage
 -------------
 
