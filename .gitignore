@@ -1,1 +1,5 @@
 Gemfile.lock
+.idea/
+*.swp
+.DS_Store
+.byebug_history

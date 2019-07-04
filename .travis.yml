@@ -1,17 +1,13 @@
 language: ruby
 
 rvm:
-  - 1.9.3
-  - 2.0.0
-  - 2.1.0
-  - ruby-head
+  - 2.2.10
+  - 2.3.8
+  - 2.4.5
+  - 2.5.3
 
 gemfile:
-  - activerecord_3_0.gemfile
-  - activerecord_3_1.gemfile
-  - activerecord_3_2.gemfile
-  - activerecord_4_1.gemfile
-
-matrix:
-  allow_failures:
-    - rvm: ruby-head
+  - activerecord_4_2.gemfile
+  - activerecord_5_0.gemfile
+  - activerecord_5_1.gemfile
+  - activerecord_5_2.gemfile

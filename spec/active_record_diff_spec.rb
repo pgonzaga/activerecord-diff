@@ -1,4 +1,5 @@
-require 'minitest/autorun'
+# frozen_string_literal: true
+
 require 'active_record'
 require 'active_record/diff'
 
@@ -19,9 +20,9 @@ describe 'ActiveRecord::Diff' do
       include ActiveRecord::Diff
     end
 
-    @person.create! :name => 'alice', :email_address => 'alice@example.com'
-    @person.create! :name => 'bob', :email_address => 'bob@example.com'
-    @person.create! :name => 'eve', :email_address => 'bob@example.com'
+    @person.create! name: 'alice', email_address: 'alice@example.com'
+    @person.create! name: 'bob', email_address: 'bob@example.com'
+    @person.create! name: 'eve', email_address: 'bob@example.com'
 
     @people = @person.all
 
@@ -30,27 +31,25 @@ describe 'ActiveRecord::Diff' do
 
   describe 'diff method' do
     it 'returns a hash of the differences between the attributes of the records' do
-      @bob.diff(@alice).must_equal({:name => %w( bob alice ), :email_address => %w( bob@example.com alice@example.com )})
-
-      @bob.diff(@eve).must_equal({:name => %w( bob eve )})
+      expect(@bob.diff(@alice)).to eq(name: %w[bob alice], email_address: %w[bob@example.com alice@example.com])
+      expect(@bob.diff(@eve)).to eq(name: %w[bob eve])
     end
 
     it 'excludes and includes attributes as specified by the diff class method' do
-      @person.diff :include => [:id], :exclude => [:email_address]
-
-      @alice.diff(@bob).must_equal({:id => [1, 2], :name => %w( alice bob )})
+      @person.diff include: [:id], exclude: [:email_address]
+      expect(@alice.diff(@bob)).to eq(id: [1, 2], name: %w[alice bob])
     end
 
     it 'uses the list of attributes specified by the diff class method' do
       @person.diff :id, :name
 
-      @alice.diff(@bob).must_equal({:id => [1, 2], :name => %w( alice bob )})
+      expect(@alice.diff(@bob)).to eq(id: [1, 2], name: %w[alice bob])
     end
   end
 
   describe 'diff method called with a hash argument' do
     it 'returns a hash of the differences between the attributes of the record and the given hash' do
-      @bob.diff({:name => 'joe'}).must_equal({:name => %w( bob joe )})
+      expect(@bob.diff(name: 'joe')).to eq(name: %w[bob joe])
     end
   end
 
@@ -58,31 +57,31 @@ describe 'ActiveRecord::Diff' do
     it 'returns a hash of the differences when the record has changes' do
       @eve.name = 'bob'
 
-      @eve.diff.must_equal({:name => %w( eve bob )})
+      expect(@eve.diff).to eq(name: %w[eve bob])
     end
 
     it 'returns an empty hash when the record has no changes' do
-      @eve.diff.must_equal({})
+      expect(@eve.diff).to eq({})
     end
   end
 
   describe 'diff query method' do
     it 'returns true when there are differences between the argument and the receiver' do
-      @alice.diff?(@bob).must_equal(true)
+      expect(@alice.diff?(@bob)).to eq(true)
     end
 
     it 'returns true when there are no differences between the argument and the receiver' do
-      @alice.diff?(@alice).must_equal(false)
+      expect(@alice.diff?(@alice)).to eq(false)
     end
   end
 
   describe 'diff query method called without arguments' do
     it 'returns true when the record has changes' do
-      @alice.diff?(@alice).must_equal(false)
+      expect(@alice.diff?(@alice)).to eq(false)
     end
 
     it 'returns false when the record has no changes' do
-      @alice.diff?.must_equal(false)
+      expect(@alice.diff?).to eq(false)
     end
   end
 end

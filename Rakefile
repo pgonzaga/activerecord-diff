@@ -1,8 +1,8 @@
-require 'rake/testtask'
+require 'rake'
+require 'rspec/core/rake_task'
 
-task :default => :spec
-
-Rake::TestTask.new(:spec) do |t|
-  t.test_files = FileList['spec/*_spec.rb']
-  t.warning = true
+RSpec::Core::RakeTask.new(:spec) do |test_task|
+  test_task.pattern = Dir.glob('spec/**/*_spec.rb')
 end
+
+task default: :spec

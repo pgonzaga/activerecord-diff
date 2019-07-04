@@ -1,7 +1,5 @@
-source 'https://rubygems.org'
+# frozen_string_literal: true
 
-group :development do
-  gem 'activerecord', '>= 3.0.0'
-end
+source 'https://rubygems.org'
 
 gemspec
